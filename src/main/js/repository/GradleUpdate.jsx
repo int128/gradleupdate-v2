@@ -26,10 +26,4 @@ export default class {
       responseType: 'json'
     });
   }
-
-  findPullRequests() {
-    return qwest.get(`${this._endpoint}/pullRequests`, null, {
-      responseType: 'json'
-    });
-  }
 }

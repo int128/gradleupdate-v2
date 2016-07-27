@@ -36,9 +36,6 @@ class GHSession {
     @Lazy
     def repositories = { RestAPI.of(GHRepository, '/repos', this, client) }()
 
-    @Lazy
-    def authenticatedUserRepositories = { RestAPI.of(GHRepository, '/user/repos', this, client) }()
-
     GHRepository getRepository(String fullName) {
         repositories.get(fullName)
     }

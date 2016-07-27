@@ -48,4 +48,11 @@ export default class {
       return promise;
     }
   }
+
+  findEvents(user) {
+    return qwest.get(`${this._endpoint}/users/${user}/events`, null, {
+      headers: {Authorization: this._authorization},
+      cache: true  // prevent Cache-Control for CORS
+    });
+  }
 }

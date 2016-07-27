@@ -28,21 +28,34 @@ export default class extends React.Component {
         <ErrorHeader kind="API Error" message={this.state.error}/>
 
         <section className="text-center">
-          <div className="page-header">
-            <h1>Gradle Update</h1>
-            <p>keeps the latest Gradle wrapper on your GitHub repositories</p>
-          </div>
-          <Link to="/signin" className="btn btn-default">
-            Sign in with GitHub Account
-          </Link>
+          <Header/>
         </section>
 
         <section className="text-center">
           <Repository repository={this.state.ghRepository}/>
           <Badge repository={this.state.ghRepository}/>
+          <GradleStatus repository={this.state.ghRepository}/>
         </section>
 
         <Footer/>
+      </div>
+    );
+  }
+}
+
+class Header extends React.Component {
+  render() {
+    return (
+      <div>
+        <div className="page-header">
+          <h1>Gradle Update</h1>
+          <p>keeps the latest Gradle wrapper on your GitHub repositories</p>
+        </div>
+        {OAuthSession.isAuthorized() ? (
+          <Link to="/" className="btn btn-default">View My Repositories</Link>
+        ) : (
+          <Link to="/signin" className="btn btn-default">Sign in with GitHub Account</Link>
+        )}
       </div>
     );
   }
@@ -62,29 +75,37 @@ class Repository extends React.Component {
 
 class Badge extends React.Component {
   render() {
-    return this.props.repository ? (
+    if (this.props.repository) {
+      const svgUrl = `${location.origin}/${this.props.repository.full_name}/status.svg`;
+      const linkUrl = `${location.origin}/${this.props.repository.full_name}/status`;
+      return (
+        <div>
+          <p>
+            <a href={linkUrl}><img src={svgUrl}/></a>
+          </p>
+          <dl>
+            <dt>Markdown</dt>
+            <dd><code>[![Gradle Status]({svgUrl})]({linkUrl})</code></dd>
+          </dl>
+          <dl>
+            <dt>HTML</dt>
+            <dd><code>{`<a href="${linkUrl}"><img src="${svgUrl}"/></a>`}</code></dd>
+          </dl>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+}
+
+class GradleStatus extends React.Component {
+  render() {
+    return (
       <div>
-        <p><img src={`/${this.props.repository.full_name}/status.svg`}/></p>
-        <dl>
-          <dt>Markdown</dt>
-          <dd>
-            <code>
-              [![Gradle Status]({location.origin}/{this.props.repository.full_name}/status.svg)]{/*
-              */}({location.origin}/{this.props.repository.full_name}/status)
-            </code>
-          </dd>
-        </dl>
-        <dl>
-          <dt>HTML</dt>
-          <dd>
-            <code>
-              {`<a href="${location.origin}/${this.props.repository.full_name}/status">`}
-              {`<img src="${location.origin}/${this.props.repository.full_name}/status.svg"/>`}
-              {`</a>`}
-            </code>
-          </dd>
-        </dl>
+        <h3>Status</h3>
+        <h3>Pull Requests</h3>
       </div>
-    ) : null;
+    );
   }
 }
