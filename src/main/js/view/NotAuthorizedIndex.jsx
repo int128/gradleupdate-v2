@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router";
-import GradleUpdate from "../repository/GradleUpdate.jsx";
+import GitHub from "../repository/GitHub.jsx";
 import ErrorHeader from "./ErrorHeader.jsx";
 import Footer from "./Footer.jsx";
 
@@ -8,12 +8,12 @@ export default class extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.gradleUpdate = new GradleUpdate();
+    this.github = new GitHub();
   }
 
   componentDidMount() {
-    this.gradleUpdate.findPullRequests()
-      .then((xhr, pullRequests) => this.setState({pullRequests: pullRequests}))
+    this.github.findEvents('gradleupdate')
+      .then((xhr, events) => this.setState({events: events}))
       .catch((e) => this.setState({error: e}));
   }
 
@@ -34,8 +34,8 @@ export default class extends React.Component {
         </section>
 
         <section className="text-center">
-          <h2>Contributions</h2>
-          <GUPullRequests pullRequests={this.state.pullRequests}/>
+          <h2>Timeline</h2>
+          <GUEvents events={this.state.events}/>
         </section>
 
         <Footer/>
@@ -44,21 +44,32 @@ export default class extends React.Component {
   }
 }
 
-class GUPullRequests extends React.Component {
+class GUEvents extends React.Component {
   render() {
     return (
       <ul className="list-group">
-        {this.props.pullRequests ? this.props.pullRequests.map((pullRequest) => (
-          <li className="list-group-item">
-            <div className="pull-right">
-              <small>{pullRequest.createdAt}</small>
-            </div>
-            Sent <a href={pullRequest.url}>Pull Request on {pullRequest.fullName}</a> to
-            update from {pullRequest.fromVersion} to {pullRequest.toVersion}
-            <div class="clearfix"></div>
-          </li>
-        )) : null}
+        {this.props.events ? this.props.events
+          .filter((event) => event.type == 'PullRequestEvent')
+          .map((event) => (
+            <li className="list-group-item">
+              <strong>
+                {event.payload.pull_request.title}
+              </strong>
+              &nbsp;
+              into
+              &nbsp;
+              <Link to={`/${event.repo.name}/status`}>{event.repo.name}</Link>
+
+              <small className="pull-right">
+                {this.timestamp(event.payload.pull_request.updated_at)}
+              </small>
+              <div className="clearfix"></div>
+            </li>
+          )) : null}
       </ul>
     );
+  }
+  timestamp(dateString) {
+    return new Date(dateString).toLocaleString();
   }
 }

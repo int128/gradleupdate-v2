@@ -1,10 +1,11 @@
 import entity.PullRequestForLatestGradleWrapper
 import groovy.json.JsonBuilder
 
+assert params.full_name
+
 def pullRequests = PullRequestForLatestGradleWrapper.findAll {
     select all from 'PullRequestForLatestGradleWrapper'
-    sort desc by 'createdAt'
-    limit 20
+    where fullName == params.full_name
 }
 
 response.contentType = 'application/json'

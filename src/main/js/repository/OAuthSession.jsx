@@ -7,6 +7,10 @@ export default {
     return localStorage.getItem('oauthToken');
   },
 
+  isAuthorized() {
+    return this.getToken() != null;
+  },
+
   expireToken() {
     localStorage.removeItem('oauthToken');
   },

@@ -5,7 +5,7 @@ import NotAuthorizedIndex from "./NotAuthorizedIndex.jsx";
 
 export default class extends React.Component {
   render() {
-    if (OAuthSession.getToken()) {
+    if (OAuthSession.isAuthorized()) {
       return (<AuthorizedIndex/>);
     } else {
       return (<NotAuthorizedIndex/>);
