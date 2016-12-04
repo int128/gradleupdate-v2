@@ -1,4 +1,4 @@
-# Gradle Update [![CircleCI](https://circleci.com/gh/int128/gradleupdate.svg?style=svg)](https://circleci.com/gh/int128/gradleupdate) [![Gradle Status](https://gradleupdate.appspot.com/int128/gradleupdate/status.svg?branch=master)](https://gradleupdate.appspot.com/int128/gradleupdate/status)
+# Gradle Update [![CircleCI](https://circleci.com/gh/int128/gradleupdate-v2.svg?style=svg)](https://circleci.com/gh/int128/gradleupdate-v2) [![Gradle Status](https://gradleupdate.appspot.com/int128/gradleupdate-v2/status.svg?branch=master)](https://gradleupdate.appspot.com/int128/gradleupdate-v2/status)
 
 Gradle Update keeps the latest Gradle Wrapper by pull requests for your repositories on GitHub.
 
